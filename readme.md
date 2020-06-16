@@ -39,6 +39,10 @@
 
 Um voo(Flight) pertence a uma Origem/Destino(location)
 
+## Executar migrations
+
+`yarn typeorm migration:run`
+
 ## Tecnologias
 
 - Node
