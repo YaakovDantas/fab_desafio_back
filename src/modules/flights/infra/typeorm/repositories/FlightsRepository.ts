@@ -1,6 +1,6 @@
 import { getRepository, Repository } from 'typeorm';
 
-import { startOfDay, isEqual, isAfter, addMinutes, parseISO } from 'date-fns';
+import { startOfDay, isEqual, isAfter, differenceInMinutes } from 'date-fns';
 
 import IFlightRepository from '@modules/flights/repositories/IFlightRepository';
 import ICreateFlightDTO from '@modules/flights/dtos/ICreateFlightDTO';
@@ -14,7 +14,9 @@ class FlightsRepository implements IFlightRepository {
   }
 
   public async all(): Promise<Flight[] | null> {
-    const flights = this.ormRepository.find();
+    const flights = this.ormRepository.find({
+      relations: ['destino', 'origem'],
+    });
 
     return flights;
   }
@@ -59,7 +61,11 @@ class FlightsRepository implements IFlightRepository {
 
     const findFlight = allFlights.find(flight => {
       if (isEqual(startOfDay(flight.data), startOfDay(data))) {
-        if (!isAfter(data, addMinutes(flight.data, 30))) {
+        const tempo_entre_voos = Math.abs(
+          differenceInMinutes(data, flight.data),
+        );
+
+        if (tempo_entre_voos <= 29) {
           return flight;
         }
       }

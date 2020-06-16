@@ -1,4 +1,4 @@
-import { Request, Response, response } from 'express';
+import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import CreateLocationService from '@modules/locations/services/CreateLocationService';

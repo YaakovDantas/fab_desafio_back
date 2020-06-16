@@ -4,8 +4,8 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 
 import Location from '@modules/locations/infra/typeorm/entities/Location';
@@ -18,27 +18,27 @@ class Flight {
   @Column()
   codigoVoo: string;
 
-  @Column()
+  @Column({ select: false })
   destino_id: string;
 
-  @OneToMany(type => Location, () => Location)
+  @ManyToOne(() => Location)
   @JoinColumn({ name: 'destino_id' })
   destino: Location;
 
-  @Column()
+  @Column({ select: false })
   origem_id: string;
 
-  @OneToMany(type => Location, () => Location)
+  @ManyToOne(() => Location)
   @JoinColumn({ name: 'origem_id' })
   origem: Location;
 
   @Column()
   data: Date;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ select: false })
   created_at: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ select: false })
   updated_at: Date;
 }
 

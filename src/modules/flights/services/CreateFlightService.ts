@@ -25,16 +25,22 @@ class CreateFlightService {
     destino_id,
     data,
   }: IRequest): Promise<Flight> {
-    // const checkFlightInDayToDestiny = await this.fightsRepository.findByDestinyAndDay(
-    //   destino_id,
-    //   data,
-    // );
+    if (origem_id === destino_id)
+      throw new AppError(
+        'Não é possível um voo ter a mesma origem e destino.',
+        422,
+      );
 
-    // if (checkFlightInDayToDestiny)
-    //   throw new AppError(
-    //     'Não é possível ter 2 voos para o mesmo destino, no mesmo dia.',
-    //     422,
-    //   );
+    const checkFlightInDayToDestiny = await this.fightsRepository.findByDestinyAndDay(
+      destino_id,
+      data,
+    );
+
+    if (checkFlightInDayToDestiny)
+      throw new AppError(
+        'Não é possível ter 2 voos para o mesmo destino, no mesmo dia.',
+        422,
+      );
 
     const checkTimeOfFlight = await this.fightsRepository.findByTimeOfFlight(
       data,
